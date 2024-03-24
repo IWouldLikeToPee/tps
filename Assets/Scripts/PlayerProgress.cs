@@ -5,6 +5,7 @@ using TMPro;
 
 public class PlayerProgress : MonoBehaviour
 {
+    public List<PlayerProgressLevel> levels;
     public RectTransform experienceValueRectTransform;
     public TextMeshProUGUI levelValueTMP;
     private int _levelValue = 1;
@@ -13,6 +14,7 @@ public class PlayerProgress : MonoBehaviour
 
     void Start()
     {
+        SetLevel(_levelValue);
         DrawUI();
     }
     
@@ -21,10 +23,26 @@ public class PlayerProgress : MonoBehaviour
         _experienceCurrentValue += value;
         if(_experienceCurrentValue >= _experienceTargetValue)
         {
-            _levelValue += 1;
+            SetLevel(_levelValue += 1);
             _experienceCurrentValue = 0;
         }
         DrawUI();
+    }
+    private void SetLevel(int value)
+    {
+        _levelValue = value;
+
+        var currentLevel = levels[_levelValue - 1];
+        _experienceTargetValue = currentLevel.experienceForTheNextLevel;
+        GetComponent<FireballCaster>().damage = currentLevel.fireballDamage;
+
+        var grenadeCaster = GetComponent<GrenadeCaster>();
+        grenadeCaster.damage = currentLevel.grenadeDamage;
+
+        if(currentLevel.grenadeDamage < 0)
+        grenadeCaster.enabled = false;
+        else
+        grenadeCaster.enabled = true;
     }
 
     

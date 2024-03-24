@@ -7,6 +7,7 @@ public class GrenadeCaster : MonoBehaviour
     public Rigidbody grenadePrefab;
     public Transform grenadeSourceTransform;
     public float force = 10;
+    public float damage = 50;
 
     
     void Update()
@@ -16,6 +17,7 @@ public class GrenadeCaster : MonoBehaviour
         var grenade = Instantiate(grenadePrefab);
         grenade.transform.position = grenadeSourceTransform.position;
         grenade.GetComponent<Rigidbody>().AddForce(grenadeSourceTransform.forward * force);
+        grenade.GetComponent<Grenade>().damage = damage;
       }  
     }
 }
